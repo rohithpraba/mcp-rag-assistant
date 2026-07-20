@@ -1,0 +1,2 @@
+# Phase 2 dependencies will be selected after validating the
+# base model, Colab environment, quantization, and Ollama export route.

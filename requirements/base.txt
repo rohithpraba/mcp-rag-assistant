@@ -1,0 +1,3 @@
+# Core runtime dependencies
+numpy
+sentence-transformers
