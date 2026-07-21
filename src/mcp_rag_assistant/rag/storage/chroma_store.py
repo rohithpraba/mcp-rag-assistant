@@ -37,6 +37,18 @@ def workspace_collection_name(workspace_id: str) -> str:
     return f"kb_{workspace}"
 
 
+@dataclass(frozen=True, slots=True)
+class SourceRefreshResult:
+    """Summary of one source-level replacement operation."""
+
+    source_id: str
+    previous_chunk_count: int
+    upserted_chunk_count: int
+    deleted_stale_chunk_count: int
+    current_chunk_count: int
+    record_set_changed: bool
+
+
 class ChromaVectorStore:
     """Store and retrieve chunk embeddings in one workspace collection."""
 
@@ -209,6 +221,189 @@ class ChromaVectorStore:
         )
 
         return len(chunk_list)
+
+    @staticmethod
+    def _clean_source_id(source_id: str) -> str:
+        """Validate and normalize one source identifier."""
+        if not isinstance(source_id, str):
+            raise TypeError("source_id must be a string")
+
+        cleaned_source_id = source_id.strip()
+
+        if not cleaned_source_id:
+            raise ValueError("source_id must not be empty")
+
+        return cleaned_source_id
+
+    def get_source_chunk_ids(
+        self,
+        source_id: str,
+    ) -> list[str]:
+        """Return every stored chunk ID belonging to one source."""
+        cleaned_source_id = self._clean_source_id(
+            source_id
+        )
+
+        result = self._collection.get(
+            where={
+                "source_id": cleaned_source_id,
+            },
+            include=[
+                "metadatas",
+            ],
+        )
+
+        return sorted(
+            str(record_id)
+            for record_id in result["ids"]
+        )
+
+    def replace_source_chunks(
+        self,
+        chunks: Sequence[TextChunk],
+        embeddings: ArrayLike,
+    ) -> SourceRefreshResult:
+        """Replace the stored chunk set for one logical source.
+
+        Current chunks are upserted before stale records are deleted.
+        This avoids deleting the previous source version when the new
+        upsert fails before writing any records.
+        """
+        chunk_list = list(chunks)
+
+        if not chunk_list:
+            raise ValueError(
+                "chunks must contain the complete current source"
+            )
+
+        source_id = self._clean_source_id(
+            chunk_list[0].source_id
+        )
+
+        source_ids = {
+            chunk.source_id
+            for chunk in chunk_list
+        }
+
+        if source_ids != {source_id}:
+            raise ValueError(
+                "all replacement chunks must have the same source_id"
+            )
+
+        content_hashes = {
+            chunk.content_hash
+            for chunk in chunk_list
+        }
+
+        if len(content_hashes) != 1:
+            raise ValueError(
+                "all replacement chunks must have the same "
+                "content_hash"
+            )
+
+        expected_indices = list(
+            range(len(chunk_list))
+        )
+
+        actual_indices = [
+            chunk.chunk_index
+            for chunk in chunk_list
+        ]
+
+        if actual_indices != expected_indices:
+            raise ValueError(
+                "replacement chunks must be supplied in complete "
+                "chunk_index order"
+            )
+
+        if any(
+            chunk.chunk_count != len(chunk_list)
+            for chunk in chunk_list
+        ):
+            raise ValueError(
+                "every replacement chunk must report the complete "
+                "chunk_count"
+            )
+
+        current_ids = {
+            chunk.chunk_id
+            for chunk in chunk_list
+        }
+
+        if len(current_ids) != len(chunk_list):
+            raise ValueError(
+                "replacement chunks must have unique chunk IDs"
+            )
+
+        previous_ids = set(
+            self.get_source_chunk_ids(source_id)
+        )
+
+        upserted_count = self.upsert_chunks(
+            chunks=chunk_list,
+            embeddings=embeddings,
+        )
+
+        stale_ids = sorted(
+            previous_ids - current_ids
+        )
+
+        if stale_ids:
+            self._collection.delete(
+                ids=stale_ids,
+            )
+
+        final_ids = set(
+            self.get_source_chunk_ids(source_id)
+        )
+
+        if final_ids != current_ids:
+            raise RuntimeError(
+                "source refresh did not produce the expected "
+                "final chunk set"
+            )
+
+        return SourceRefreshResult(
+            source_id=source_id,
+            previous_chunk_count=len(previous_ids),
+            upserted_chunk_count=upserted_count,
+            deleted_stale_chunk_count=len(stale_ids),
+            current_chunk_count=len(final_ids),
+            record_set_changed=(
+                previous_ids != current_ids
+            ),
+        )
+
+    def delete_source(
+        self,
+        source_id: str,
+    ) -> int:
+        """Delete all stored chunks belonging to one source."""
+        cleaned_source_id = self._clean_source_id(
+            source_id
+        )
+
+        record_ids = self.get_source_chunk_ids(
+            cleaned_source_id
+        )
+
+        if not record_ids:
+            return 0
+
+        self._collection.delete(
+            ids=record_ids,
+        )
+
+        remaining_ids = self.get_source_chunk_ids(
+            cleaned_source_id
+        )
+
+        if remaining_ids:
+            raise RuntimeError(
+                "source deletion left unexpected chunk records"
+            )
+
+        return len(record_ids)
 
     def search(
         self,
