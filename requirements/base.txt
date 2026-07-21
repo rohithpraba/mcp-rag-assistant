@@ -1,3 +1,4 @@
 # Core runtime dependencies
 numpy
 sentence-transformers
+chromadb==1.5.9
