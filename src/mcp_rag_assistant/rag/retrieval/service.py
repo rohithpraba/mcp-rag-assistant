@@ -130,6 +130,30 @@ def format_chunk_citation(
     else:
         source_name = "unknown source"
 
+    location_parts: list[str] = []
+
+    page_start = result.metadata.get("page_start")
+    page_end = result.metadata.get("page_end")
+
+    valid_page_range = (
+        isinstance(page_start, int)
+        and not isinstance(page_start, bool)
+        and isinstance(page_end, int)
+        and not isinstance(page_end, bool)
+        and page_start > 0
+        and page_end >= page_start
+    )
+
+    if valid_page_range:
+        if page_start == page_end:
+            location_parts.append(
+                f"page {page_start}"
+            )
+        else:
+            location_parts.append(
+                f"pages {page_start}-{page_end}"
+            )
+
     chunk_index = result.metadata.get(
         "chunk_index"
     )
@@ -138,16 +162,25 @@ def format_chunk_citation(
         "chunk_count"
     )
 
-    if (
+    valid_chunk_position = (
         isinstance(chunk_index, int)
+        and not isinstance(chunk_index, bool)
         and isinstance(chunk_count, int)
+        and not isinstance(chunk_count, bool)
         and chunk_index >= 0
         and chunk_count > 0
         and chunk_index < chunk_count
-    ):
+    )
+
+    if valid_chunk_position:
+        location_parts.append(
+            f"chunk {chunk_index + 1}/{chunk_count}"
+        )
+
+    if location_parts:
         return (
             f"[{source_name}, "
-            f"chunk {chunk_index + 1}/{chunk_count}]"
+            f"{', '.join(location_parts)}]"
         )
 
     return f"[{source_name}]"

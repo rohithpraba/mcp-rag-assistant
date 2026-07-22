@@ -13,6 +13,8 @@ class TextChunk:
 
     Word and character end positions are exclusive. For example,
     start_word=0 and end_word=10 describes the first ten words.
+
+    PDF page numbers are one-based because they are shown to users.
     """
 
     workspace_id: str
@@ -40,9 +42,13 @@ class TextChunk:
 
     text: str
 
+    page_start: int | None = None
+    page_end: int | None = None
+    source_page_count: int | None = None
+
     def metadata(self) -> dict[str, str | int]:
-        """Return scalar metadata suitable for later vector storage."""
-        return {
+        """Return scalar metadata suitable for vector storage."""
+        metadata: dict[str, str | int] = {
             "workspace_id": self.workspace_id,
             "source_id": self.source_id,
             "chunk_id": self.chunk_id,
@@ -65,3 +71,14 @@ class TextChunk:
             "word_count": self.word_count,
             "character_count": len(self.text),
         }
+
+        if self.page_start is not None:
+            metadata["page_start"] = self.page_start
+
+        if self.page_end is not None:
+            metadata["page_end"] = self.page_end
+
+        if self.source_page_count is not None:
+            metadata["source_page_count"] = self.source_page_count
+
+        return metadata
