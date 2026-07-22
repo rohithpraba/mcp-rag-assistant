@@ -1,0 +1,358 @@
+{
+  "run": {
+    "timestamp_utc": "2026-07-22T17:50:18Z",
+    "workspace_id": "phase1-benchmark",
+    "embedding_model": "sentence-transformers/all-MiniLM-L6-v2",
+    "embedding_dimension": 384,
+    "generation_model": "gemma3:latest",
+    "top_k": 3,
+    "chunk_size_words": 90,
+    "overlap_words": 15,
+    "stored_chunk_count": 3
+  },
+  "indexed_sources": [
+    {
+      "source_name": "python_venv.md",
+      "source_id": "src_8137e50810085f1d7011916bd1f6d911",
+      "chunk_count": 1
+    },
+    {
+      "source_name": "rag_operations.md",
+      "source_id": "src_bc480fb8e6a643f747d847f1640f0dcc",
+      "chunk_count": 2
+    }
+  ],
+  "summary": {
+    "case_count": 8,
+    "answerable_case_count": 6,
+    "unanswerable_case_count": 2,
+    "retrieval_hit_rate_at_k": 1.0,
+    "mean_reciprocal_rank": 1.0,
+    "answerability_accuracy": 1.0,
+    "answerable_response_accuracy": 1.0,
+    "unanswerable_abstention_accuracy": 1.0,
+    "citation_validity_rate": 1.0,
+    "exact_term_accuracy": 1.0,
+    "average_retrieval_latency_ms": 50.29875,
+    "average_generation_latency_seconds": 18.71597085,
+    "average_end_to_end_latency_seconds": 20.811875
+  },
+  "cases": [
+    {
+      "case_id": "source-identity",
+      "question": "Which identifier remains stable when the content of an existing source changes?",
+      "answerable": true,
+      "first_relevant_rank": 1,
+      "retrieval_hit": true,
+      "reciprocal_rank": 1.0,
+      "retrieval_latency_ms": 25.88,
+      "answer": "source_id [S1] remains the same while the content_hash changes.",
+      "insufficient_evidence": false,
+      "answerability_correct": true,
+      "citation_status": "valid",
+      "citation_correct": true,
+      "exact_terms_correct": true,
+      "generation_latency_seconds": 28.5682726,
+      "end_to_end_latency_seconds": 30.67,
+      "cited_labels": [
+        "S1"
+      ],
+      "top_sources": [
+        {
+          "rank": 1,
+          "source_name": "rag_operations.md",
+          "chunk_id": "chk_2877a7d3d23102edb8ee72d63b4c76fe",
+          "similarity": 0.688264
+        },
+        {
+          "rank": 2,
+          "source_name": "rag_operations.md",
+          "chunk_id": "chk_0cb1e038198cfb371cbde18743a76ddd",
+          "similarity": 0.191641
+        },
+        {
+          "rank": 3,
+          "source_name": "python_venv.md",
+          "chunk_id": "chk_29a4b206f7cb7805a191cf32e3f895f9",
+          "similarity": 0.12145
+        }
+      ]
+    },
+    {
+      "case_id": "content-version",
+      "question": "Which value identifies the current normalized content version of a source?",
+      "answerable": true,
+      "first_relevant_rank": 1,
+      "retrieval_hit": true,
+      "reciprocal_rank": 1.0,
+      "retrieval_latency_ms": 39.943,
+      "answer": "content_hash [S1]",
+      "insufficient_evidence": false,
+      "answerability_correct": true,
+      "citation_status": "valid",
+      "citation_correct": true,
+      "exact_terms_correct": true,
+      "generation_latency_seconds": 17.7779071,
+      "end_to_end_latency_seconds": 19.858,
+      "cited_labels": [
+        "S1"
+      ],
+      "top_sources": [
+        {
+          "rank": 1,
+          "source_name": "rag_operations.md",
+          "chunk_id": "chk_2877a7d3d23102edb8ee72d63b4c76fe",
+          "similarity": 0.58183
+        },
+        {
+          "rank": 2,
+          "source_name": "rag_operations.md",
+          "chunk_id": "chk_0cb1e038198cfb371cbde18743a76ddd",
+          "similarity": 0.238367
+        },
+        {
+          "rank": 3,
+          "source_name": "python_venv.md",
+          "chunk_id": "chk_29a4b206f7cb7805a191cf32e3f895f9",
+          "similarity": 0.158052
+        }
+      ]
+    },
+    {
+      "case_id": "stale-cleanup",
+      "question": "What does a source refresh delete from the previous version?",
+      "answerable": true,
+      "first_relevant_rank": 1,
+      "retrieval_hit": true,
+      "reciprocal_rank": 1.0,
+      "retrieval_latency_ms": 27.671,
+      "answer": "A source refresh deletes stale chunks from the previous version. [S1]",
+      "insufficient_evidence": false,
+      "answerability_correct": true,
+      "citation_status": "valid",
+      "citation_correct": true,
+      "exact_terms_correct": true,
+      "generation_latency_seconds": 16.8885616,
+      "end_to_end_latency_seconds": 18.977,
+      "cited_labels": [
+        "S1"
+      ],
+      "top_sources": [
+        {
+          "rank": 1,
+          "source_name": "rag_operations.md",
+          "chunk_id": "chk_2877a7d3d23102edb8ee72d63b4c76fe",
+          "similarity": 0.501196
+        },
+        {
+          "rank": 2,
+          "source_name": "rag_operations.md",
+          "chunk_id": "chk_0cb1e038198cfb371cbde18743a76ddd",
+          "similarity": 0.215377
+        },
+        {
+          "rank": 3,
+          "source_name": "python_venv.md",
+          "chunk_id": "chk_29a4b206f7cb7805a191cf32e3f895f9",
+          "similarity": 0.210728
+        }
+      ]
+    },
+    {
+      "case_id": "top-k-limit",
+      "question": "Does top-k semantic retrieval guarantee that every returned chunk is relevant?",
+      "answerable": true,
+      "first_relevant_rank": 1,
+      "retrieval_hit": true,
+      "reciprocal_rank": 1.0,
+      "retrieval_latency_ms": 71.507,
+      "answer": "Top-k semantic retrieval returns the nearest available chunks according to the configured vector distance. It does not guarantee that those chunks are relevant [S1].",
+      "insufficient_evidence": false,
+      "answerability_correct": true,
+      "citation_status": "valid",
+      "citation_correct": true,
+      "exact_terms_correct": null,
+      "generation_latency_seconds": 19.3290973,
+      "end_to_end_latency_seconds": 21.467,
+      "cited_labels": [
+        "S1"
+      ],
+      "top_sources": [
+        {
+          "rank": 1,
+          "source_name": "rag_operations.md",
+          "chunk_id": "chk_0cb1e038198cfb371cbde18743a76ddd",
+          "similarity": 0.773263
+        },
+        {
+          "rank": 2,
+          "source_name": "rag_operations.md",
+          "chunk_id": "chk_2877a7d3d23102edb8ee72d63b4c76fe",
+          "similarity": 0.275471
+        },
+        {
+          "rank": 3,
+          "source_name": "python_venv.md",
+          "chunk_id": "chk_29a4b206f7cb7805a191cf32e3f895f9",
+          "similarity": -0.001338
+        }
+      ]
+    },
+    {
+      "case_id": "venv-config-file",
+      "question": "What configuration file is written when a Python virtual environment is created?",
+      "answerable": true,
+      "first_relevant_rank": 1,
+      "retrieval_hit": true,
+      "reciprocal_rank": 1.0,
+      "retrieval_latency_ms": 34.404,
+      "answer": "The venv module creates a configuration file named pyvenv.cfg [S1].",
+      "insufficient_evidence": false,
+      "answerability_correct": true,
+      "citation_status": "valid",
+      "citation_correct": true,
+      "exact_terms_correct": true,
+      "generation_latency_seconds": 15.9761482,
+      "end_to_end_latency_seconds": 18.078,
+      "cited_labels": [
+        "S1"
+      ],
+      "top_sources": [
+        {
+          "rank": 1,
+          "source_name": "python_venv.md",
+          "chunk_id": "chk_29a4b206f7cb7805a191cf32e3f895f9",
+          "similarity": 0.726565
+        },
+        {
+          "rank": 2,
+          "source_name": "rag_operations.md",
+          "chunk_id": "chk_2877a7d3d23102edb8ee72d63b4c76fe",
+          "similarity": 0.157511
+        },
+        {
+          "rank": 3,
+          "source_name": "rag_operations.md",
+          "chunk_id": "chk_0cb1e038198cfb371cbde18743a76ddd",
+          "similarity": 0.027557
+        }
+      ]
+    },
+    {
+      "case_id": "venv-directories",
+      "question": "Which subdirectory names contain the virtual environment executable and activation scripts on Windows and POSIX systems?",
+      "answerable": true,
+      "first_relevant_rank": 1,
+      "retrieval_hit": true,
+      "reciprocal_rank": 1.0,
+      "retrieval_latency_ms": 82.494,
+      "answer": "On Windows, these are placed in the Scripts subdirectory [S1]. On POSIX systems, they are placed in the bin subdirectory [S1].",
+      "insufficient_evidence": false,
+      "answerability_correct": true,
+      "citation_status": "valid",
+      "citation_correct": true,
+      "exact_terms_correct": true,
+      "generation_latency_seconds": 17.1655286,
+      "end_to_end_latency_seconds": 19.247,
+      "cited_labels": [
+        "S1"
+      ],
+      "top_sources": [
+        {
+          "rank": 1,
+          "source_name": "python_venv.md",
+          "chunk_id": "chk_29a4b206f7cb7805a191cf32e3f895f9",
+          "similarity": 0.562962
+        },
+        {
+          "rank": 2,
+          "source_name": "rag_operations.md",
+          "chunk_id": "chk_2877a7d3d23102edb8ee72d63b4c76fe",
+          "similarity": 0.17198
+        },
+        {
+          "rank": 3,
+          "source_name": "rag_operations.md",
+          "chunk_id": "chk_0cb1e038198cfb371cbde18743a76ddd",
+          "similarity": 0.080991
+        }
+      ]
+    },
+    {
+      "case_id": "unsupported-sourdough",
+      "question": "What oven temperature should I use to bake sourdough bread?",
+      "answerable": false,
+      "first_relevant_rank": null,
+      "retrieval_hit": null,
+      "reciprocal_rank": null,
+      "retrieval_latency_ms": 48.615,
+      "answer": "INSUFFICIENT_EVIDENCE",
+      "insufficient_evidence": true,
+      "answerability_correct": true,
+      "citation_status": "not_applicable",
+      "citation_correct": null,
+      "exact_terms_correct": null,
+      "generation_latency_seconds": 17.1733,
+      "end_to_end_latency_seconds": 19.256,
+      "cited_labels": [],
+      "top_sources": [
+        {
+          "rank": 1,
+          "source_name": "rag_operations.md",
+          "chunk_id": "chk_2877a7d3d23102edb8ee72d63b4c76fe",
+          "similarity": -0.027949
+        },
+        {
+          "rank": 2,
+          "source_name": "python_venv.md",
+          "chunk_id": "chk_29a4b206f7cb7805a191cf32e3f895f9",
+          "similarity": -0.065243
+        },
+        {
+          "rank": 3,
+          "source_name": "rag_operations.md",
+          "chunk_id": "chk_0cb1e038198cfb371cbde18743a76ddd",
+          "similarity": -0.075518
+        }
+      ]
+    },
+    {
+      "case_id": "unsupported-astronomy",
+      "question": "How many moons does Saturn currently have?",
+      "answerable": false,
+      "first_relevant_rank": null,
+      "retrieval_hit": null,
+      "reciprocal_rank": null,
+      "retrieval_latency_ms": 71.876,
+      "answer": "INSUFFICIENT_EVIDENCE",
+      "insufficient_evidence": true,
+      "answerability_correct": true,
+      "citation_status": "not_applicable",
+      "citation_correct": null,
+      "exact_terms_correct": null,
+      "generation_latency_seconds": 16.8489514,
+      "end_to_end_latency_seconds": 18.942,
+      "cited_labels": [],
+      "top_sources": [
+        {
+          "rank": 1,
+          "source_name": "rag_operations.md",
+          "chunk_id": "chk_2877a7d3d23102edb8ee72d63b4c76fe",
+          "similarity": 0.077324
+        },
+        {
+          "rank": 2,
+          "source_name": "rag_operations.md",
+          "chunk_id": "chk_0cb1e038198cfb371cbde18743a76ddd",
+          "similarity": 0.050083
+        },
+        {
+          "rank": 3,
+          "source_name": "python_venv.md",
+          "chunk_id": "chk_29a4b206f7cb7805a191cf32e3f895f9",
+          "similarity": 0.005028
+        }
+      ]
+    }
+  ]
+}

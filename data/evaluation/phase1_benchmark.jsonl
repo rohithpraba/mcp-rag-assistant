@@ -1,0 +1,8 @@
+{"case_id":"source-identity","question":"Which identifier remains stable when the content of an existing source changes?","answerable":true,"expected_source_names":["rag_operations.md"],"required_term_groups":[["source_id"]]}
+{"case_id":"content-version","question":"Which value identifies the current normalized content version of a source?","answerable":true,"expected_source_names":["rag_operations.md"],"required_term_groups":[["content_hash"]]}
+{"case_id":"stale-cleanup","question":"What does a source refresh delete from the previous version?","answerable":true,"expected_source_names":["rag_operations.md"],"required_term_groups":[["stale chunks"]]}
+{"case_id":"top-k-limit","question":"Does top-k semantic retrieval guarantee that every returned chunk is relevant?","answerable":true,"expected_source_names":["rag_operations.md"],"required_term_groups":[]}
+{"case_id":"venv-config-file","question":"What configuration file is written when a Python virtual environment is created?","answerable":true,"expected_source_names":["python_venv.md"],"required_term_groups":[["pyvenv.cfg"]]}
+{"case_id":"venv-directories","question":"Which subdirectory names contain the virtual environment executable and activation scripts on Windows and POSIX systems?","answerable":true,"expected_source_names":["python_venv.md"],"required_term_groups":[["Scripts"],["bin"]]}
+{"case_id":"unsupported-sourdough","question":"What oven temperature should I use to bake sourdough bread?","answerable":false,"expected_source_names":[],"required_term_groups":[]}
+{"case_id":"unsupported-astronomy","question":"How many moons does Saturn currently have?","answerable":false,"expected_source_names":[],"required_term_groups":[]}
