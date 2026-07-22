@@ -13,7 +13,7 @@ from mcp_rag_assistant.rag.embeddings.sentence_transformer import (
 class FakeSentenceTransformer:
     """Small deterministic substitute for the real model."""
 
-    def get_sentence_embedding_dimension(self) -> int:
+    def get_embedding_dimension(self) -> int:
         return 3
 
     def encode_document(

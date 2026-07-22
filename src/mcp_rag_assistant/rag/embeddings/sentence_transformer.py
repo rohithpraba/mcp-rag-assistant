@@ -50,7 +50,7 @@ class SentenceTransformerEmbedder:
             )
         )
 
-        dimension = self._model.get_sentence_embedding_dimension()
+        dimension = self._model.get_embedding_dimension()
 
         if dimension is None or int(dimension) <= 0:
             raise ValueError(
