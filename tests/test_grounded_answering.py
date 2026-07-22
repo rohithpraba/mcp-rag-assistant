@@ -322,3 +322,52 @@ def test_invalid_context_budget_is_rejected() -> None:
             ),
             max_context_characters=0,
         )
+
+
+def test_grouped_citations_are_extracted_and_validated() -> None:
+    answer = answer_question(
+        "What do the sources support?",
+        embedder=FakeEmbedder(),
+        store=FakeStore(
+            [
+                make_result(
+                    1,
+                    "The first source supports one fact.",
+                ),
+                make_result(
+                    2,
+                    "The second source supports another fact.",
+                ),
+            ]
+        ),
+        generator=FakeGenerator(
+            "First fact [S1]. Another fact [S2, S1]."
+        ),
+        top_k=2,
+    )
+
+    assert answer.citation_status == "valid"
+    assert answer.cited_labels == ("S1", "S2")
+    assert answer.unknown_citation_labels == ()
+
+
+def test_unknown_label_inside_grouped_citation_is_reported() -> None:
+    answer = answer_question(
+        "What is supported?",
+        embedder=FakeEmbedder(),
+        store=FakeStore(
+            [
+                make_result(
+                    1,
+                    "The supplied source supports one fact.",
+                )
+            ]
+        ),
+        generator=FakeGenerator(
+            "A supported statement [S1, S9]."
+        ),
+    )
+
+    assert answer.citation_status == "unknown"
+    assert answer.cited_labels == ("S1", "S9")
+    assert answer.unknown_citation_labels == ("S9",)
