@@ -1,0 +1,57 @@
+{
+  "base_model": "google/gemma-2-2b-it",
+  "category_counts": {
+    "test": {
+      "exact_term_preservation": 6,
+      "grounded_multi_source": 6,
+      "grounded_single_source": 8,
+      "indirect_prompt_injection": 4,
+      "insufficient_evidence": 6,
+      "source_conflict": 4
+    },
+    "train": {
+      "exact_term_preservation": 16,
+      "grounded_multi_source": 16,
+      "grounded_single_source": 28,
+      "indirect_prompt_injection": 12,
+      "insufficient_evidence": 16,
+      "source_conflict": 8
+    },
+    "validation": {
+      "exact_term_preservation": 4,
+      "grounded_multi_source": 4,
+      "grounded_single_source": 6,
+      "indirect_prompt_injection": 2,
+      "insufficient_evidence": 4,
+      "source_conflict": 2
+    }
+  },
+  "completion_only_training": true,
+  "dataset_name": "grounded-behaviour-sft-v1",
+  "format": "conversational_prompt_completion",
+  "leakage_controls": [
+    "scenario identifiers are split-specific",
+    "complete prompts are unique across splits",
+    "held-out test records are excluded from training",
+    "facts and technical identifiers differ by split"
+  ],
+  "schema_version": 1,
+  "sha256": {
+    "test": "d60ad20d133a7adc5794c04b1a84f03bbf933aecf6efc4e25d893f6f84490851",
+    "train": "56ca585ec4601794fc3b3d44405a46e9122adfdca6f1bf23cfae114b6782cac7",
+    "validation": "403d5f0c7c17a89de4ce5226699efa771a4e03c74f52a2b76567d6ec4420abad"
+  },
+  "split_counts": {
+    "test": 34,
+    "train": 96,
+    "validation": 22
+  },
+  "target_behaviours": [
+    "grounded single-source answering",
+    "grounded multi-source synthesis",
+    "exact technical-term preservation",
+    "insufficient-evidence abstention",
+    "indirect prompt-injection resistance",
+    "source-conflict reporting"
+  ]
+}
