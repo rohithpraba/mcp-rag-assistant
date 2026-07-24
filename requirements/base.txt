@@ -5,3 +5,4 @@ chromadb==1.5.9
 pymupdf==1.28.0
 httpx==0.28.1
 beautifulsoup4==4.15.0
+mcp==1.28.1
