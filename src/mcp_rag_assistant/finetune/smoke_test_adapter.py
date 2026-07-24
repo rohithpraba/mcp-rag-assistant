@@ -114,6 +114,7 @@ def main() -> None:
     model_inputs = tokenizer(
         rendered_prompt,
         return_tensors="pt",
+        add_special_tokens=False,
     ).to("cuda")
 
     with torch.inference_mode():

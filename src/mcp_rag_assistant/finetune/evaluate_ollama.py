@@ -5,19 +5,53 @@ from __future__ import annotations
 import argparse
 import hashlib
 import json
+import re
 import time
 from dataclasses import asdict, dataclass
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
 
-from ..rag.answering.service import (
-    INSUFFICIENT_EVIDENCE,
-    extract_citation_labels,
-)
 from ..rag.generation.ollama_client import (
     OllamaChatClient,
 )
+
+
+INSUFFICIENT_EVIDENCE = "INSUFFICIENT_EVIDENCE"
+
+_CITATION_GROUP_PATTERN = re.compile(
+    r"\[(S[1-9][0-9]*(?:\s*,\s*S[1-9][0-9]*)*)\]"
+)
+
+_CITATION_LABEL_PATTERN = re.compile(
+    r"S[1-9][0-9]*"
+)
+
+
+def extract_citation_labels(
+    answer: str,
+) -> tuple[str, ...]:
+    """Return unique citation labels in first-appearance order.
+
+    Supports single citations such as ``[S1]`` and grouped
+    citations such as ``[S1, S2]``.
+    """
+    labels: list[str] = []
+    observed: set[str] = set()
+
+    for group_match in _CITATION_GROUP_PATTERN.finditer(
+        answer
+    ):
+        citation_group = group_match.group(1)
+
+        for label in _CITATION_LABEL_PATTERN.findall(
+            citation_group
+        ):
+            if label not in observed:
+                observed.add(label)
+                labels.append(label)
+
+    return tuple(labels)
 
 
 DEFAULT_TEST_PATH = Path(

@@ -1,0 +1,97 @@
+{
+  "timestamp_utc": "2026-07-24T06:54:38Z",
+  "proof_mode": false,
+  "model_id": "google/gemma-2-2b-it",
+  "output_directory": "<external-artifact>/gemma2-grounded-lora",
+  "gpu": "Tesla T4",
+  "gpu_memory_gib": 14.56317138671875,
+  "peak_cuda_memory_gib": 8.696433067321777,
+  "train_records": 96,
+  "validation_records": 22,
+  "train_token_lengths": {
+    "count": 96,
+    "minimum": 220,
+    "maximum": 316,
+    "average": 262.3333333333333
+  },
+  "validation_token_lengths": {
+    "count": 22,
+    "minimum": 217,
+    "maximum": 312,
+    "average": 261.40909090909093
+  },
+  "parameter_summary": {
+    "total_parameters": 2635108608,
+    "trainable_parameters": 20766720,
+    "trainable_percentage": 0.7880783333542205
+  },
+  "train_metrics": {
+    "train_runtime": 199.4862,
+    "train_samples_per_second": 1.444,
+    "train_steps_per_second": 0.361,
+    "total_flos": 927152056221696.0,
+    "train_loss": 0.03818018179804818,
+    "epoch": 3.0
+  },
+  "evaluation_metrics": {
+    "eval_loss": 5.339486233424395e-05,
+    "eval_runtime": 4.4601,
+    "eval_samples_per_second": 4.933,
+    "eval_steps_per_second": 4.933,
+    "eval_entropy": 0.0005550059641708768,
+    "eval_num_tokens": 75552.0,
+    "eval_mean_token_accuracy": 1.0,
+    "epoch": 3.0
+  },
+  "adapter_files": [
+    "README.md",
+    "adapter_config.json",
+    "adapter_model.safetensors",
+    "chat_template.jinja",
+    "tokenizer.json",
+    "tokenizer_config.json"
+  ],
+  "dataset_sha256": {
+    "train": "56ca585ec4601794fc3b3d44405a46e9122adfdca6f1bf23cfae114b6782cac7",
+    "validation": "403d5f0c7c17a89de4ce5226699efa771a4e03c74f52a2b76567d6ec4420abad"
+  },
+  "package_versions": {
+    "torch": "2.11.0+cu128",
+    "transformers": "5.13.1",
+    "trl": "1.9.0",
+    "peft": "0.19.1",
+    "datasets": "5.0.0",
+    "accelerate": "1.14.0"
+  },
+  "configuration": {
+    "model_id": "google/gemma-2-2b-it",
+    "train_path": "data/finetune/splits/train.jsonl",
+    "validation_path": "data/finetune/splits/validation.jsonl",
+    "max_length": 512,
+    "num_train_epochs": 3,
+    "per_device_train_batch_size": 1,
+    "per_device_eval_batch_size": 1,
+    "gradient_accumulation_steps": 4,
+    "learning_rate": 0.0002,
+    "weight_decay": 0.01,
+    "warmup_ratio": 0.1,
+    "lr_scheduler_type": "constant",
+    "max_grad_norm": 1.0,
+    "lora_r": 16,
+    "lora_alpha": 32,
+    "lora_dropout": 0.05,
+    "target_modules": [
+      "q_proj",
+      "k_proj",
+      "v_proj",
+      "o_proj",
+      "gate_proj",
+      "up_proj",
+      "down_proj"
+    ],
+    "seed": 42,
+    "logging_steps": 5,
+    "save_total_limit": 2,
+    "attn_implementation": "eager"
+  }
+}

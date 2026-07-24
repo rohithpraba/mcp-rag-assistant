@@ -61,11 +61,16 @@ def token_length_summary(
             + list(record["completion"])
         )
 
-        token_ids = tokenizer.apply_chat_template(
+        rendered_chat = tokenizer.apply_chat_template(
             messages,
-            tokenize=True,
+            tokenize=False,
             add_generation_prompt=False,
         )
+
+        token_ids = tokenizer(
+            rendered_chat,
+            add_special_tokens=False,
+        )["input_ids"]
 
         lengths.append(len(token_ids))
 
