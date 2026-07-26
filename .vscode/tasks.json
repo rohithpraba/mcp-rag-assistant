@@ -1,0 +1,51 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "Run Public Demo",
+      "type": "shell",
+      "command": "powershell",
+      "args": ["-NoProfile", "-ExecutionPolicy", "Bypass", "-File", "${workspaceFolder}\\scripts\\demo.ps1", "start", "-Public"],
+      "group": {"kind": "build", "isDefault": true},
+      "runOptions": {"instanceLimit": 1},
+      "presentation": {"reveal": "always", "panel": "dedicated", "clear": true},
+      "problemMatcher": []
+    },
+    {
+      "label": "Run Local Demo",
+      "type": "shell",
+      "command": "powershell",
+      "args": ["-NoProfile", "-ExecutionPolicy", "Bypass", "-File", "${workspaceFolder}\\scripts\\demo.ps1", "start"],
+      "runOptions": {"instanceLimit": 1},
+      "presentation": {"reveal": "always", "panel": "dedicated", "clear": true},
+      "problemMatcher": []
+    },
+    {
+      "label": "Stop Demo",
+      "type": "shell",
+      "command": "powershell",
+      "args": ["-NoProfile", "-ExecutionPolicy", "Bypass", "-File", "${workspaceFolder}\\scripts\\demo.ps1", "stop"],
+      "runOptions": {"instanceLimit": 1},
+      "presentation": {"reveal": "always", "panel": "dedicated"},
+      "problemMatcher": []
+    },
+    {
+      "label": "Demo Status",
+      "type": "shell",
+      "command": "powershell",
+      "args": ["-NoProfile", "-ExecutionPolicy", "Bypass", "-File", "${workspaceFolder}\\scripts\\demo.ps1", "status"],
+      "runOptions": {"instanceLimit": 1},
+      "presentation": {"reveal": "always", "panel": "dedicated"},
+      "problemMatcher": []
+    },
+    {
+      "label": "Open Current Public Demo",
+      "type": "shell",
+      "command": "powershell",
+      "args": ["-NoProfile", "-ExecutionPolicy", "Bypass", "-File", "${workspaceFolder}\\scripts\\demo.ps1", "open"],
+      "runOptions": {"instanceLimit": 1},
+      "presentation": {"reveal": "always", "panel": "dedicated"},
+      "problemMatcher": []
+    }
+  ]
+}

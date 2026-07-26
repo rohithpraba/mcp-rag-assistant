@@ -218,9 +218,34 @@ The MCP suite includes a real official-client subprocess handshake.
 ## Public demo
 
 The demo uses the existing RAG services and a fixed, pre-indexed
-`public-demo` workspace. Start host Ollama with `gemma3:latest`, then use
-`docker compose up --build web` locally or
-`docker compose --profile public up --build` for a temporary Quick Tunnel.
+`public-demo` workspace.
+
+### One-click VS Code
+
+Open the repository folder in VS Code and press `Ctrl+Shift+B`. The default
+task starts the complete public demo, validates a fresh Quick Tunnel URL,
+copies it to the clipboard, and opens it in the default browser. Quick Tunnel
+URLs change whenever the tunnel is recreated.
+
+### Double-click Windows
+
+- `run-demo.cmd` starts the public demo.
+- `stop-demo.cmd` stops the demo services without removing data.
+- `demo-status.cmd` displays local and public status.
+
+### Command line
+
+```powershell
+powershell -ExecutionPolicy Bypass -File scripts/demo.ps1 start
+powershell -ExecutionPolicy Bypass -File scripts/demo.ps1 start -Public
+powershell -ExecutionPolicy Bypass -File scripts/demo.ps1 stop
+powershell -ExecutionPolicy Bypass -File scripts/demo.ps1 status
+```
+
+Prerequisites are Docker Desktop, Ollama, an installed `gemma3:latest` model,
+and internet access for public mode. The HTTP/2 tunnel transport also requires
+outbound TCP port 7844.
+
 See [the demo guide](docs/DEMO.md) for endpoints, security controls, curl
 examples, availability limits, and Windows troubleshooting.
 

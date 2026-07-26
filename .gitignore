@@ -32,4 +32,5 @@ indexes/
 models/
 checkpoints/
 outputs/
+outputs/public-demo-url.txt
 logs/
