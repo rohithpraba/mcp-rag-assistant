@@ -1,110 +1,43 @@
-# End-to-End Demo
+# Public web demo
 
-This demo uses the working local RAG model `gemma3:latest`. It does not claim
-that tuned Gemma 2 runs in Ollama.
+The browser and read-only REST API run in one FastAPI container. They call the
+existing retrieval and answering services against the fixed `public-demo`
+Chroma workspace. Chroma and the Hugging Face cache use Docker volumes. Ollama
+remains on the host and is reached at `host.docker.internal:11434`; it is never
+proxied or published.
 
-## Activate
-
-PowerShell:
-
-```powershell
-.\.venv\Scripts\Activate.ps1
-$env:PYTHONPATH = "src"
-```
-
-Git Bash:
+Start Ollama on the host and ensure `gemma3:latest` is installed, then run:
 
 ```bash
-source .venv/Scripts/activate
-export PYTHONPATH=src
+docker compose up --build web
+docker compose --profile public up --build
 ```
 
-Install if needed:
+The local UI is at `http://localhost:8000`. For public mode, find the temporary
+`https://….trycloudflare.com` address in the `cloudflared` logs. Quick Tunnels
+exist only while the laptop, Docker services, Ollama, and tunnel are running
+and have no uptime guarantee.
+
+Anonymous access is read-only. Routes are `GET /`, `/healthz`, `/readyz`,
+`/api/v1/demo/sources` and `POST /api/v1/search`, `/api/v1/ask`. There are no
+upload, ingestion, refresh, deletion, URL-fetch, or Ollama-proxy routes.
 
 ```bash
-python -m pip install -r requirements/base.txt -r requirements/dev.txt
+curl -X POST http://localhost:8000/api/v1/ask \
+  -H "Content-Type: application/json" \
+  -d '{"question":"What technologies does this project use?","top_k":3}'
 ```
 
-## Verify Ollama
+Inputs are bounded, requests are rate limited, and only one generation runs at
+a time by default. Generation has a strict response timeout; because the RAG
+call is synchronous in a worker thread, a timed-out thread cannot be forcibly
+stopped once Ollama work has begun.
 
-```bash
-ollama list
-ollama pull gemma3:latest
-```
+On Windows Docker Desktop, enable host networking integration if
+`host.docker.internal` does not resolve and verify Ollama accepts connections
+from Docker. On Linux, Compose supplies the `host-gateway` mapping. Do not
+publish port 11434.
 
-Ensure Ollama is running on `http://localhost:11434`.
-
-## Index and search
-
-```bash
-python -m mcp_rag_assistant.rag.index_local_file data/raw/sample_notes.md --workspace demo
-python -m mcp_rag_assistant.rag.search_workspace "What can be updated without retraining the model?" --workspace demo
-```
-
-Indexing prints a JSON summary with workspace, source identity, hash, chunks,
-and refresh counts. Search prints ranked chunks with similarity, citations,
-IDs, provenance, and text. First embedding use may download the model if it is
-not cached.
-
-## Ask an answerable question
-
-```bash
-python -m mcp_rag_assistant.rag.ask_workspace "What can be updated without retraining the model?" --workspace demo --ollama-model gemma3:latest
-```
-
-Expected shape:
-
-```text
-Answer summary:
-{"workspace_id": "demo", "insufficient_evidence": false, "citation_status": "valid", ...}
-Answer:
-... [S1]
-Source map:
-[S1] [sample_notes.md, chunk 1/1]
-```
-
-Exact wording and timing can vary.
-
-## Ask an unsupported question
-
-```bash
-python -m mcp_rag_assistant.rag.ask_workspace "What is the office Wi-Fi password?" --workspace demo --ollama-model gemma3:latest
-```
-
-Expected answer: `INSUFFICIENT_EVIDENCE`.
-
-## Run or protocol-test MCP
-
-```bash
-python -m mcp_rag_assistant.mcp_server.server
-```
-
-The process waits for JSON-RPC on stdin and emits no ordinary stdout. Stop a
-manual run with `Ctrl+C`.
-
-PowerShell protocol test:
-
-```powershell
-$env:PYTHONPATH = "src"
-python -m pytest -q tests/test_mcp_server.py::test_stdio_protocol_discovery_and_prompt
-```
-
-Git Bash:
-
-```bash
-PYTHONPATH=src python -m pytest -q tests/test_mcp_server.py::test_stdio_protocol_discovery_and_prompt
-```
-
-The official client initializes the real subprocess, discovers capabilities,
-retrieves the prompt, captures stderr, and terminates the child.
-
-## Troubleshooting
-
-- Import failure: set `PYTHONPATH` using the syntax for your current shell.
-- PowerShell activation blocked: call `.\.venv\Scripts\python.exe` directly or
-  use an appropriate user-approved execution policy.
-- Ollama failure: start it and verify `ollama list`.
-- Missing model: run `ollama pull gemma3:latest`.
-- Empty PDF: image-only PDFs need OCR, which is not included.
-- URL rejected: only controlled public HTTP/HTTPS pages and direct PDFs are
-  supported; private addresses and unsafe redirects are blocked.
+This is not a 24/7 service and the project does not claim production
+readiness. Oracle Always Free is only a possible future optional 24/7
+experiment; it is not part of this demo.

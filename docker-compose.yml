@@ -1,0 +1,22 @@
+services:
+  web:
+    build: .
+    ports:
+      - "8000:8000"
+    environment:
+      OLLAMA_BASE_URL: ${OLLAMA_BASE_URL:-http://host.docker.internal:11434}
+      GITHUB_REPOSITORY_URL: ${GITHUB_REPOSITORY_URL:-}
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    volumes:
+      - chroma-data:/data/chroma
+      - huggingface-cache:/home/app/.cache/huggingface
+  cloudflared:
+    image: cloudflare/cloudflared:latest
+    command: tunnel --no-autoupdate --url http://web:8000
+    depends_on:
+      - web
+    profiles: ["public"]
+volumes:
+  chroma-data:
+  huggingface-cache:

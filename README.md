@@ -19,6 +19,7 @@ instructions embedded in documents.
 - Local Ollama answers with citations and exact `INSUFFICIENT_EVIDENCE`
 - Gemma 2 2B FP16 LoRA training and direct PEFT evaluation
 - Official `mcp==1.28.1` local stdio server with tools, resource, and prompt
+- Dockerized read-only FastAPI demo with an optional Cloudflare Quick Tunnel
 - Deterministic tests, including a real MCP subprocess handshake
 
 ## Architecture
@@ -214,6 +215,15 @@ PYTHONPATH=src python -m pytest -q tests/test_mcp_server.py
 
 The MCP suite includes a real official-client subprocess handshake.
 
+## Public demo
+
+The demo uses the existing RAG services and a fixed, pre-indexed
+`public-demo` workspace. Start host Ollama with `gemma3:latest`, then use
+`docker compose up --build web` locally or
+`docker compose --profile public up --build` for a temporary Quick Tunnel.
+See [the demo guide](docs/DEMO.md) for endpoints, security controls, curl
+examples, availability limits, and Windows troubleshooting.
+
 ## Measured results
 
 The fixed Phase 1 benchmark has **8 cases over 2 controlled documents**:
@@ -247,7 +257,8 @@ model performance or production-grade prompt-injection resistance.
 - Fine-tuning uses a small 34-case synthetic held-out benchmark.
 - Phase 1 evaluation uses 8 cases over 2 controlled documents.
 - PDFs must contain extractable text; there is no OCR.
-- There is no recursive crawling, reranking, UI, or Docker packaging.
+- There is no recursive crawling or reranking; the public UI is a temporary,
+  read-only local demo.
 - MCP is local stdio only; no production authentication or remote deployment.
 - The project is a portfolio/research implementation, not production-ready.
 
