@@ -207,7 +207,14 @@ def _readiness(settings: Settings) -> dict[str, object]:
     if workspace_exists:
         try:
             import chromadb
-            client = chromadb.PersistentClient(path=str(settings.database_path))
+            from chromadb.config import Settings as ChromaSettings
+
+            client = chromadb.PersistentClient(
+                path=str(settings.database_path),
+                settings=ChromaSettings(
+                    anonymized_telemetry=False,
+                ),
+            )
             collection = client.get_collection(workspace_collection_name(WORKSPACE))
             chunk_count = collection.count()
         except Exception:
