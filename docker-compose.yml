@@ -2,7 +2,7 @@ services:
   web:
     build: .
     ports:
-      - "8000:8000"
+      - "127.0.0.1:8000:8000"
     environment:
       OLLAMA_BASE_URL: ${OLLAMA_BASE_URL:-http://host.docker.internal:11434}
       GITHUB_REPOSITORY_URL: ${GITHUB_REPOSITORY_URL:-}
