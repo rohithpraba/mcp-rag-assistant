@@ -12,8 +12,8 @@ services:
       - chroma-data:/data/chroma
       - huggingface-cache:/home/app/.cache/huggingface
   cloudflared:
-    image: cloudflare/cloudflared:latest
-    command: tunnel --no-autoupdate --url http://web:8000
+    image: cloudflare/cloudflared:2026.7.3
+    command: tunnel --no-autoupdate --protocol http2 --url http://web:8000
     depends_on:
       - web
     profiles: ["public"]
