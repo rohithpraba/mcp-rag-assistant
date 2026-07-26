@@ -1,9 +1,84 @@
 <!doctype html>
-<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width">
-<title>Public RAG Demo</title><link rel="stylesheet" href="/static/style.css"></head>
-<body><main><h1>MCP-Powered RAG Assistant</h1>
-<p>Ask a question about the project. Answers use only the pre-indexed project documentation.</p>
-<p id="ready">Checking readiness…</p>
-<div id="samples"></div><textarea id="question" maxlength="500" placeholder="Ask about the project"></textarea>
-<button id="ask">Ask</button><p id="status"></p><article id="answer"></article><section id="evidence"></section>
-<p><a id="github" href="#" hidden>GitHub repository</a></p></main><script src="/static/app.js"></script></body></html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="A read-only, evidence-backed demo of the MCP RAG Assistant.">
+  <title>MCP RAG Assistant — Public Demo</title>
+  <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+  <header class="site-header">
+    <div class="brand">
+      <a class="wordmark" href="/" aria-label="MCP RAG Assistant home">MCP-Powered RAG Assistant</a>
+      <span>Evidence-backed project Q&amp;A</span>
+    </div>
+    <div class="header-actions">
+      <span id="ready" class="readiness" role="status">Checking readiness…</span>
+      <a id="github" class="text-link" href="#" rel="noreferrer" hidden>GitHub ↗</a>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero" aria-labelledby="page-title">
+      <p class="eyebrow">Read-only public demo</p>
+      <h1 id="page-title">Grounded answers,<br>with the evidence attached.</h1>
+      <p class="lede">Explore this project through its pre-indexed documentation. Every supported answer is retrieved from the local knowledge base and returned with inspectable citations.</p>
+      <ul class="capabilities">
+        <li><strong>Dynamic retrieval</strong><span>Relevant document chunks selected per question</span></li>
+        <li><strong>Grounded local generation</strong><span>Answers constrained to retrieved evidence</span></li>
+        <li><strong>MCP integration</strong><span>Tools, resources, and prompts over local stdio</span></li>
+      </ul>
+      <div class="technology-list" aria-label="Project technologies">
+        <span>RAG</span><span>LoRA</span><span>MCP</span><span>Chroma</span><span>Ollama</span><span>Docker</span>
+      </div>
+    </section>
+
+    <section class="workspace" aria-labelledby="ask-title">
+      <div class="section-heading">
+        <div>
+          <p class="section-number">01 / Ask</p>
+          <h2 id="ask-title">Question the project</h2>
+        </div>
+        <p>Responses use only the indexed project sources.</p>
+      </div>
+
+      <div id="samples" class="samples" aria-label="Sample questions"></div>
+
+      <label for="question">Your question</label>
+      <textarea id="question" maxlength="500" rows="4" placeholder="What technologies does this project use?"></textarea>
+      <div class="ask-row">
+        <span class="input-note">Maximum 500 characters</span>
+        <button id="ask" class="primary" type="button">Ask the assistant <span aria-hidden="true">→</span></button>
+      </div>
+      <p id="status" class="status" role="status" aria-live="polite"></p>
+    </section>
+
+    <section id="response-panel" class="response-panel" aria-labelledby="answer-title">
+      <div class="section-heading">
+        <div>
+          <p class="section-number">02 / Answer</p>
+          <h2 id="answer-title">Grounded response</h2>
+        </div>
+        <span id="answer-state" class="answer-state">Waiting for a question</span>
+      </div>
+      <article id="answer" class="answer" aria-live="polite">
+        <p class="empty-state">Ask a sample question or write your own. The answer and its supporting evidence will appear here.</p>
+      </article>
+
+      <div class="evidence-heading">
+        <h3>Retrieved evidence</h3>
+        <span id="evidence-count">0 sources</span>
+      </div>
+      <div id="evidence" class="evidence"></div>
+    </section>
+  </main>
+
+  <footer>
+    <p><strong>Temporary demonstration.</strong> Anonymous access, fixed workspace, read-only sources, and no paid model API.</p>
+    <p>Built with local retrieval and Ollama. <a id="footer-github" href="#" rel="noreferrer" hidden>View source on GitHub ↗</a></p>
+  </footer>
+
+  <script src="/static/app.js"></script>
+</body>
+</html>
