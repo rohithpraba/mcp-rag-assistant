@@ -8,3 +8,11 @@ checkpoints
 __pycache__
 .pytest_cache
 data/processed
+AGENTS.md
+private-notes/
+learning-materials/
+interview-materials/
+docs/private/
+docs/PROJECT_STATUS.md
+docs/RESUME_AND_INTERVIEW.md
+outputs/public-demo-url.txt

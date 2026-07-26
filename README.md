@@ -106,7 +106,7 @@ src/mcp_rag_assistant/rag/       Complete RAG pipeline
 src/mcp_rag_assistant/finetune/  Dataset, training, and evaluators
 src/mcp_rag_assistant/mcp_server/Local stdio MCP server
 tests/                           RAG, fine-tuning, MCP, protocol tests
-docs/                            Technical and portfolio documentation
+docs/                            Public technical documentation
 ```
 
 Generated `indexes/`, `models/`, `outputs/`, and `checkpoints/` are not
@@ -299,9 +299,7 @@ apply; the recorded LoRA run used a Google Colab Tesla T4.
 
 ## Documentation
 
-- [Project status](docs/PROJECT_STATUS.md)
 - [Architecture](docs/ARCHITECTURE.md)
 - [Evaluation](docs/EVALUATION.md)
 - [Demo](docs/DEMO.md)
 - [Decisions](docs/DECISIONS.md)
-- [Resume and interview notes](docs/RESUME_AND_INTERVIEW.md)

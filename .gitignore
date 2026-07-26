@@ -10,6 +10,7 @@ dist/
 
 # Testing and coverage
 .pytest_cache/
+.pytest-tmp-*/
 .coverage
 htmlcov/
 
@@ -34,3 +35,12 @@ checkpoints/
 outputs/
 outputs/public-demo-url.txt
 logs/
+
+# Local operating instructions and private notes
+AGENTS.md
+private-notes/
+learning-materials/
+interview-materials/
+docs/private/
+docs/PROJECT_STATUS.md
+docs/RESUME_AND_INTERVIEW.md
