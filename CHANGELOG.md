@@ -8,7 +8,7 @@ All notable repository-maintenance changes are documented here.
 
 - Standard Python packaging through `pyproject.toml`.
 - Installed command-line entry points for indexing, retrieval, answering, MCP, and demo bootstrap operations.
-- Repository license, third-party notices, security policy, contribution guidance, and persistent maintenance instructions.
+- Repository license, third-party notices, security policy, and contribution guidance.
 
 ### Changed
 
