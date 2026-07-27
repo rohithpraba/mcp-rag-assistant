@@ -7,7 +7,7 @@ All notable repository-maintenance changes are documented here.
 ### Added
 
 - Standard Python packaging through `pyproject.toml`.
-- Installed command-line entry points for indexing, retrieval, answering, MCP, and demo bootstrap operations.
+- Installed command-line entry points for indexing, retrieval, grounded answering, and the MCP server.
 - Repository license, third-party notices, security policy, and contribution guidance.
 
 ### Changed
