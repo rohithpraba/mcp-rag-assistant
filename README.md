@@ -4,6 +4,9 @@ A local-first knowledge assistant that indexes changing documents, retrieves
 evidence, generates cited answers through Ollama, evaluates parameter-efficient
 Gemma 2 behaviour tuning, and exposes RAG through the Model Context Protocol.
 
+> **Status:** Portfolio/research implementation. Local-first and testable, but
+> not presented as a production service.
+
 The project separates dynamic knowledge from model behaviour: RAG keeps facts
 current and traceable, while LoRA targets grounding, abstention, citation
 discipline, exact technical terms, conflict reporting, and resistance to
@@ -101,12 +104,13 @@ sequenceDiagram
 configs/                         Fine-tuning configuration
 data/evaluation/                 Phase 1 benchmark and results
 data/finetune/                   Dataset splits and Phase 2 evidence
-requirements/                    Runtime, development, training dependencies
+docs/                            Public technical documentation
+requirements/                    Compatibility wrappers for dependency groups
 src/mcp_rag_assistant/rag/       Complete RAG pipeline
 src/mcp_rag_assistant/finetune/  Dataset, training, and evaluators
 src/mcp_rag_assistant/mcp_server/Local stdio MCP server
 tests/                           RAG, fine-tuning, MCP, protocol tests
-docs/                            Public technical documentation
+pyproject.toml                   Package, dependency, test, and lint configuration
 ```
 
 Generated `indexes/`, `models/`, `outputs/`, and `checkpoints/` are not
@@ -114,7 +118,7 @@ versioned.
 
 ## Setup
 
-Python 3.11+ is recommended.
+Python 3.11 or later is recommended.
 
 PowerShell:
 
@@ -122,8 +126,7 @@ PowerShell:
 py -m venv .venv
 .\.venv\Scripts\Activate.ps1
 python -m pip install --upgrade pip
-python -m pip install -r requirements/base.txt -r requirements/dev.txt
-$env:PYTHONPATH = "src"
+python -m pip install -e ".[dev]"
 ```
 
 Git Bash on Windows:
@@ -132,17 +135,23 @@ Git Bash on Windows:
 py -m venv .venv
 source .venv/Scripts/activate
 python -m pip install --upgrade pip
-python -m pip install -r requirements/base.txt -r requirements/dev.txt
-export PYTHONPATH=src
+python -m pip install -e ".[dev]"
 ```
 
-Training dependencies are optional and not required for RAG or MCP:
+Install the optional web demonstration dependencies with:
 
 ```bash
-python -m pip install -r requirements/training.txt
+python -m pip install -e ".[web,dev]"
 ```
 
-Do not rerun training merely to use the core project.
+Training dependencies are optional and are not required for RAG or MCP:
+
+```bash
+python -m pip install -e ".[training]"
+```
+
+The files under `requirements/` remain as compatibility wrappers around these
+package extras. Do not rerun training merely to use the core project.
 
 ## Ollama prerequisite
 
@@ -162,22 +171,23 @@ adapter currently runs in Ollama.
 Use one workspace name throughout:
 
 ```bash
-python -m mcp_rag_assistant.rag.index_local_file data/raw/sample_notes.md --workspace demo
-python -m mcp_rag_assistant.rag.index_pdf_file path/to/document.pdf --workspace demo
-python -m mcp_rag_assistant.rag.index_url https://example.com/public-page --workspace demo
+mcp-rag-index-file data/raw/sample_notes.md --workspace demo
+mcp-rag-index-pdf path/to/document.pdf --workspace demo
+mcp-rag-index-url https://example.com/public-page --workspace demo
 
-python -m mcp_rag_assistant.rag.search_workspace "What does a dynamic knowledge base allow?" --workspace demo
-python -m mcp_rag_assistant.rag.ask_workspace "What does a dynamic knowledge base allow?" --workspace demo --ollama-model gemma3:latest
-python -m mcp_rag_assistant.rag.ask_workspace "What is the office Wi-Fi password?" --workspace demo --ollama-model gemma3:latest
+mcp-rag-search "What does a dynamic knowledge base allow?" --workspace demo
+mcp-rag-ask "What does a dynamic knowledge base allow?" --workspace demo --ollama-model gemma3:latest
+mcp-rag-ask "What is the office Wi-Fi password?" --workspace demo --ollama-model gemma3:latest
 ```
 
+The corresponding `python -m mcp_rag_assistant...` commands remain available.
 URL ingestion handles one controlled public static HTML page or direct PDF. It
 is not a recursive crawler.
 
 ## MCP server
 
 ```bash
-python -m mcp_rag_assistant.mcp_server.server
+mcp-rag-server
 ```
 
 Capabilities:
@@ -191,29 +201,24 @@ The server uses local stdio only. Discovery requires no Ollama, model load,
 index, internet, or credentials. Calling `answer_question` requires local
 Ollama.
 
-## Tests
-
-PowerShell:
-
-```powershell
-$env:PYTHONPATH = "src"
-python -m pytest -q
-```
-
-Git Bash:
+## Tests and package checks
 
 ```bash
-PYTHONPATH=src python -m pytest -q
+python -m ruff check src tests
+python -m pytest -q
+python -m build
+python -m pip check
 ```
 
 Focused suites:
 
 ```bash
-PYTHONPATH=src python -m pytest -q tests/finetune
-PYTHONPATH=src python -m pytest -q tests/test_mcp_server.py
+python -m pytest -q tests/finetune
+python -m pytest -q tests/test_mcp_server.py
 ```
 
-The MCP suite includes a real official-client subprocess handshake.
+The MCP suite includes a real official-client subprocess handshake. Ordinary
+CI does not download models, call Ollama, or rerun LoRA training.
 
 ## Public demo
 
@@ -277,6 +282,8 @@ model performance or production-grade prompt-injection resistance.
 
 ## Known limitations
 
+- Citation checks validate that source labels were supplied and recognized;
+  they do not prove semantic entailment of every generated sentence.
 - Tuned Gemma 2 deployment through local Windows Ollama is deferred after
   direct-adapter and merged-Safetensors import routes failed.
 - Fine-tuning uses a small 34-case synthetic held-out benchmark.
@@ -297,9 +304,15 @@ The workflow uses local software, open models, and open-source libraries. No
 paid embedding or LLM API is required. Hardware and electricity costs still
 apply; the recorded LoRA run used a Google Colab Tesla T4.
 
-## Documentation
+## Documentation and maintenance
 
 - [Architecture](docs/ARCHITECTURE.md)
 - [Evaluation](docs/EVALUATION.md)
 - [Demo](docs/DEMO.md)
 - [Decisions](docs/DECISIONS.md)
+- [Contributing](CONTRIBUTING.md)
+- [Security policy](SECURITY.md)
+- [Third-party notices](THIRD_PARTY_NOTICES.md)
+- [Changelog](CHANGELOG.md)
+
+Original project code is available under the [MIT License](LICENSE).

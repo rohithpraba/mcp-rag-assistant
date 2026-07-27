@@ -1,3 +1,2 @@
--r base.txt
-fastapi==0.139.2
-uvicorn[standard]==0.35.0
+# Compatibility wrapper. Web/demo dependencies are declared in pyproject.toml.
+-e .[web]

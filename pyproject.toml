@@ -1,0 +1,88 @@
+[build-system]
+requires = ["setuptools>=77"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "mcp-rag-assistant"
+version = "0.1.0"
+description = "Local-first RAG and MCP assistant with deterministic indexing, cited answers, explicit abstention, and bounded evaluation."
+readme = "README.md"
+requires-python = ">=3.11"
+license = "MIT"
+authors = [{ name = "Rohith Prabakaran" }]
+keywords = [
+  "rag",
+  "model-context-protocol",
+  "local-llm",
+  "ollama",
+  "document-retrieval",
+]
+classifiers = [
+  "Development Status :: 3 - Alpha",
+  "Programming Language :: Python :: 3",
+  "Programming Language :: Python :: 3.11",
+  "Topic :: Scientific/Engineering :: Artificial Intelligence",
+]
+dependencies = [
+  "numpy",
+  "sentence-transformers",
+  "chromadb==1.5.9",
+  "pymupdf==1.28.0",
+  "httpx==0.28.1",
+  "beautifulsoup4==4.15.0",
+  "mcp==1.28.1",
+]
+
+[project.optional-dependencies]
+web = [
+  "fastapi==0.139.2",
+  "uvicorn[standard]==0.35.0",
+]
+dev = [
+  "build>=1.2,<2",
+  "pytest>=8,<10",
+  "ruff>=0.12,<1",
+]
+training = [
+  "transformers>=5.10.1,<6",
+  "trl==1.9.0",
+  "peft>=0.19.0,<1",
+  "datasets==5.0.0",
+  "accelerate>=1.8.0,<2",
+  "huggingface-hub>=0.36.0",
+  "safetensors>=0.5.0",
+  "sentencepiece>=0.2.0",
+  "protobuf>=5.0",
+]
+
+[project.urls]
+Repository = "https://github.com/rohithpraba/mcp-rag-assistant"
+Issues = "https://github.com/rohithpraba/mcp-rag-assistant/issues"
+
+[project.scripts]
+mcp-rag-index-file = "mcp_rag_assistant.rag.index_local_file:main"
+mcp-rag-index-pdf = "mcp_rag_assistant.rag.index_pdf_file:main"
+mcp-rag-index-url = "mcp_rag_assistant.rag.index_url:main"
+mcp-rag-search = "mcp_rag_assistant.rag.search_workspace:main"
+mcp-rag-ask = "mcp_rag_assistant.rag.ask_workspace:main"
+mcp-rag-server = "mcp_rag_assistant.mcp_server.server:main"
+
+[tool.setuptools]
+include-package-data = true
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.setuptools.package-data]
+"mcp_rag_assistant.web" = ["static/*"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+
+[tool.ruff]
+target-version = "py311"
+line-length = 100
+exclude = ["notebooks"]
+
+[tool.ruff.lint]
+select = ["E9", "F63", "F7", "F82"]
