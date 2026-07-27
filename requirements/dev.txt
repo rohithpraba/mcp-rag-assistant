@@ -1,2 +1,2 @@
-# Development and testing dependencies
-pytest
+# Compatibility wrapper. Development dependencies are declared in pyproject.toml.
+-e .[dev]
