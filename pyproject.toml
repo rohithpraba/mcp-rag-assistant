@@ -35,8 +35,8 @@ dependencies = [
 
 [project.optional-dependencies]
 web = [
-  "fastapi==0.139.2",
-  "uvicorn[standard]==0.35.0",
+  "fastapi==0.140.7",
+  "uvicorn[standard]==0.51.0",
 ]
 dev = [
   "build>=1.2,<2",
@@ -45,7 +45,7 @@ dev = [
 ]
 training = [
   "transformers>=5.10.1,<6",
-  "trl==1.9.0",
+  "trl==1.9.1",
   "peft>=0.19.0,<1",
   "datasets==5.0.0",
   "accelerate>=1.8.0,<2",
