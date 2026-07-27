@@ -66,7 +66,6 @@ mcp-rag-index-url = "mcp_rag_assistant.rag.index_url:main"
 mcp-rag-search = "mcp_rag_assistant.rag.search_workspace:main"
 mcp-rag-ask = "mcp_rag_assistant.rag.ask_workspace:main"
 mcp-rag-server = "mcp_rag_assistant.mcp_server.server:main"
-mcp-rag-demo-bootstrap = "mcp_rag_assistant.web.bootstrap:main"
 
 [tool.setuptools]
 include-package-data = true
